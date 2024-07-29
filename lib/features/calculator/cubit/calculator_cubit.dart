@@ -155,4 +155,51 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       ),
     );
   }
+
+  void remove() {
+    if (state.secondNumber.isNotEmpty) {
+      emit(
+        state.copyWith(
+          secondNumber:
+              state.secondNumber.substring(0, state.secondNumber.length - 1),
+        ),
+      );
+      if (state.firstNumber == '') {
+        emit(
+          state.copyWith(firstNumber: '0'),
+        );
+      } else if (state.action.isNotEmpty) {
+        emit(
+          state.copyWith(action: '', hasAction: false),
+        );
+      } else if (state.firstNumber.isNotEmpty) {
+        emit(
+          state.copyWith(
+            firstNumber:
+                state.firstNumber.substring(0, state.firstNumber.length - 1),
+          ),
+        );
+        if (state.firstNumber == '') {
+          emit(
+            state.copyWith(
+              firstNumber: '0',
+            ),
+          );
+        }
+      }
+    }
+  }
+//   void remove() {
+//     if (secondNumber.isNotEmpty) {
+//       secondNumber = secondNumber.substring(0, secondNumber.length - 1);
+//       if (firstNumber == '') firstNumber = '0';
+//     } else if (action.isNotEmpty) {
+//       action = '';
+//       hasAction = false;
+//     } else if (firstNumber.isNotEmpty) {
+//       firstNumber = firstNumber.substring(0, firstNumber.length - 1);
+//       if (firstNumber == '') firstNumber = '0';
+//     }
+//     notifyListeners();
+//   }
 }
