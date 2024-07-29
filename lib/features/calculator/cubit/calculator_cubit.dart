@@ -143,4 +143,16 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       }
     }
   }
+
+  void removeAll() {
+    emit(
+      state.copyWith(
+        firstNumber: '0',
+        secondNumber: '',
+        action: '',
+        hasAction: false,
+        historyList: [],
+      ),
+    );
+  }
 }
