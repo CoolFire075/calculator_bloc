@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:calculator_bloc/features/calculator/cubit/calculator_cubit.dart';
+import 'package:calculator_bloc/features/calculator/cubit/calculator_state.dart';
+import 'package:calculator_bloc/features/calculator/cubit/calculator_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +19,7 @@ class CalculatorPage extends StatelessWidget {
         title: const Text(
           'My calculator',
           style: TextStyle(
-            color: ,
+            color: CalculatorStyle.numberColor,
             fontSize: 45,
           ),
         ),
@@ -25,7 +29,7 @@ class CalculatorPage extends StatelessWidget {
           },
           icon: const Icon(
             Icons.chevron_left,
-            color: AppStyles.numberColor,
+            color: CalculatorStyle.numberColor,
           ),
         ),
       ),
@@ -48,10 +52,10 @@ class CalculatorPage extends StatelessWidget {
                     child: ElevatedButton(
                       style: const ButtonStyle(
                         backgroundColor:
-                        WidgetStatePropertyAll(AppStyles.iconColor),
+                            WidgetStatePropertyAll(AppStyles.iconColor),
                       ),
                       onPressed: () {
-                        notifier.removeAll();
+                        cubit.removeAll();
                       },
                       child: const Text(
                         'c',
@@ -66,7 +70,7 @@ class CalculatorPage extends StatelessWidget {
                     child: ElevatedButton(
                       style: AppStyles.buttonStyle,
                       onPressed: () {
-                        notifier.remove();
+                        cubit.remove();
                       },
                       child: const Icon(
                         size: AppStyles.numberSize + 20,
@@ -79,7 +83,7 @@ class CalculatorPage extends StatelessWidget {
                     child: ElevatedButton(
                       style: const ButtonStyle(
                         backgroundColor:
-                        WidgetStatePropertyAll(AppStyles.iconColor),
+                            WidgetStatePropertyAll(AppStyles.iconColor),
                       ),
                       onPressed: () {
                         notifier.getPercent();
@@ -221,7 +225,7 @@ class CalculatorPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
-                    WidgetStatePropertyAll(AppStyles.iconColor),
+                        WidgetStatePropertyAll(AppStyles.iconColor),
                   ),
                   onPressed: () {},
                   child: const Text(
@@ -243,7 +247,7 @@ class CalculatorPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
-                    WidgetStatePropertyAll(AppStyles.iconColor),
+                        WidgetStatePropertyAll(AppStyles.iconColor),
                   ),
                   onPressed: () {
                     notifier.getFractionalNumber();
@@ -261,7 +265,7 @@ class CalculatorPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
-                    WidgetStatePropertyAll(AppStyles.actionColor),
+                        WidgetStatePropertyAll(AppStyles.actionColor),
                   ),
                   onPressed: () {
                     notifier.equal();
@@ -279,6 +283,116 @@ class CalculatorPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CalculatorConsumerWidget extends StatelessWidget {
+  const CalculatorConsumerWidget({
+    super.key,
+    required this.notifier,
+  });
+
+  final CalculatorState notifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: Text(
+            notifier.firstNumber + notifier.action + notifier.secondNumber,
+            style: const TextStyle(
+              color: CalculatorStyle.numberColor,
+              fontSize: CalculatorStyle.numberSize,
+            ),
+            textAlign: TextAlign.end,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class NumberButton extends StatelessWidget {
+  const NumberButton({
+    super.key,
+    required this.number,
+    required this.onPressed,
+  });
+
+  final VoidCallback onPressed;
+  final String number;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ElevatedButton(
+        style: const ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(Colors.white24),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          number,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 60.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CalculatorConsumerText extends StatelessWidget {
+  const CalculatorConsumerText({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CalculatorNotifier>(
+      builder: (BuildContext context, value, Widget? child) {
+        return Text(
+          value.firstNumber + value.action + value.secondNumber,
+          style: const TextStyle(fontSize: 60, color: Colors.white),
+        );
+      },
+    );
+  }
+}
+
+class CalculatorConsumerHistory extends StatelessWidget {
+  const CalculatorConsumerHistory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CalculatorNotifier>(
+      builder: (BuildContext context, value, Widget? child) {
+        return SizedBox(
+          height: 200,
+          child: ListView.builder(
+            itemCount: value.historyList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      value.historyList[index],
+                      style: const TextStyle(
+                        color: AppStyles.iconColor,
+                        fontSize: AppStyles.numberSize,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -189,17 +189,94 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       }
     }
   }
-//   void remove() {
-//     if (secondNumber.isNotEmpty) {
-//       secondNumber = secondNumber.substring(0, secondNumber.length - 1);
-//       if (firstNumber == '') firstNumber = '0';
-//     } else if (action.isNotEmpty) {
-//       action = '';
-//       hasAction = false;
-//     } else if (firstNumber.isNotEmpty) {
-//       firstNumber = firstNumber.substring(0, firstNumber.length - 1);
-//       if (firstNumber == '') firstNumber = '0';
-//     }
-//     notifyListeners();
-//   }
+
+  void getFractionalNumber() {
+    if (state.hasAction == false) {
+      if (state.firstNumber.isNotEmpty) {
+        if (state.firstNumber.contains('.') == false) {
+          emit(
+            state.copyWith(
+              firstNumber: '${state.firstNumber}.',
+            ),
+          );
+        }
+      }
+    } else {
+      if (state.secondNumber.isNotEmpty) {
+        if (state.secondNumber.contains('.') == false) {
+          emit(
+            state.copyWith(
+              secondNumber: '${state.secondNumber}.',
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  void equal() {
+    if (state.firstNumber.lastIndexOf('.') == state.firstNumber.length) {
+      emit(
+        state.copyWith(
+          firstNumber:
+              state.firstNumber.substring(0, state.firstNumber.length - 1),
+        ),
+      );
+    }
+    if (state.secondNumber.lastIndexOf('.') == state.secondNumber.length) {
+      emit(
+        state.copyWith(
+          secondNumber:
+              state.secondNumber.substring(0, state.secondNumber.length - 1),
+        ),
+      );
+    }
+    makeAction();
+    emit(
+      state.copyWith(
+        hasAction: false,
+        action: '',
+      ),
+    );
+  }
+
+  void addNumber(int number) {
+    if (state.hasAction == false) {
+      addFirstNumber(number);
+    } else {
+      addSecondNumber(number);
+    }
+  }
+
+  void addFirstNumber(int number) {
+    if (state.firstNumber != '0') {
+      emit(
+        state.copyWith(
+          firstNumber: state.firstNumber + number.toString(),
+        ),
+      );
+    } else if (state.firstNumber == '0') {
+      emit(
+        state.copyWith(
+          firstNumber: number.toString(),
+        ),
+      );
+    }
+  }
+
+  void addSecondNumber(int number) {
+    if (state.secondNumber != '0') {
+      emit(
+        state.copyWith(
+          secondNumber: state.secondNumber + number.toString(),
+        ),
+      );
+    } else if (state.secondNumber == '0') {
+      emit(
+        state.copyWith(
+          secondNumber: number.toString(),
+        ),
+      );
+    }
+  }
 }
