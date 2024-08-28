@@ -1,17 +1,17 @@
 import 'dart:io';
-
 import 'package:calculator_bloc/features/calculator/cubit/calculator_cubit.dart';
 import 'package:calculator_bloc/features/calculator/cubit/calculator_state.dart';
 import 'package:calculator_bloc/features/calculator/cubit/calculator_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class CalculatorPage extends StatelessWidget {
   const CalculatorPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<CalculatorCubit>();
+    final cubit = context.watch<CalculatorCubit>();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -37,113 +37,109 @@ class CalculatorPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const CalculatorConsumerHistory(),
+          const CalculatorHistory(),
           const Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               CalculatorConsumerText(),
             ],
           ),
-          Consumer(
-            builder: (BuildContext context, value, Widget? child) {
-              return Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: const ButtonStyle(
-                        backgroundColor:
-                            WidgetStatePropertyAll(AppStyles.iconColor),
-                      ),
-                      onPressed: () {
-                        cubit.removeAll();
-                      },
-                      child: const Text(
-                        'c',
-                        style: TextStyle(
-                          color: AppStyles.actionColor,
-                          fontSize: AppStyles.numberSize,
-                        ),
-                      ),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: const ButtonStyle(
+                    backgroundColor:
+                        WidgetStatePropertyAll(CalculatorStyle.iconColor),
+                  ),
+                  onPressed: () {
+                    cubit.removeAll();
+                  },
+                  child: const Text(
+                    'c',
+                    style: TextStyle(
+                      color: CalculatorStyle.actionColor,
+                      fontSize: CalculatorStyle.numberSize,
                     ),
                   ),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: AppStyles.buttonStyle,
-                      onPressed: () {
-                        cubit.remove();
-                      },
-                      child: const Icon(
-                        size: AppStyles.numberSize + 20,
-                        Icons.delete_forever_outlined,
-                        color: AppStyles.actionColor,
-                      ),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: CalculatorStyle.buttonStyle,
+                  onPressed: () {
+                    cubit.remove();
+                  },
+                  child: const Icon(
+                    size: CalculatorStyle.numberSize + 20,
+                    Icons.delete_forever_outlined,
+                    color: CalculatorStyle.actionColor,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  style: const ButtonStyle(
+                    backgroundColor:
+                        WidgetStatePropertyAll(CalculatorStyle.iconColor),
+                  ),
+                  onPressed: () {
+                    cubit.getPercent();
+                  },
+                  child: const Text(
+                    '%',
+                    style: TextStyle(
+                      color: CalculatorStyle.actionColor,
+                      fontSize: CalculatorStyle.numberSize,
                     ),
                   ),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: const ButtonStyle(
-                        backgroundColor:
-                            WidgetStatePropertyAll(AppStyles.iconColor),
-                      ),
-                      onPressed: () {
-                        notifier.getPercent();
-                      },
-                      child: const Text(
-                        '%',
-                        style: TextStyle(
-                          color: AppStyles.actionColor,
-                          fontSize: AppStyles.numberSize,
-                        ),
-                      ),
-                    ),
+                ),
+              ),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    cubit.divide();
+                  },
+                  style: CalculatorStyle.buttonStyle,
+                  child: SvgPicture.asset(
+                    height: CalculatorStyle.numberSize + 20,
+                    CalculatorStyle.divisionAssetName,
+                    color: Colors.orange,
                   ),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        notifier.divide();
-                      },
-                      style: AppStyles.buttonStyle,
-                      child: SvgPicture.asset(
-                        height: AppStyles.numberSize + 20,
-                        AppStyles.divisionAssetName,
-                        color: Colors.orange,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
+                ),
+              ),
+            ],
           ),
           Row(
             children: [
               NumberButton(
                 number: '7',
                 onPressed: () {
-                  notifier.addNumber(7);
+                  cubit.addNumber(7);
                 },
               ),
               NumberButton(
                 number: '8',
                 onPressed: () {
-                  notifier.addNumber(8);
+                  cubit.addNumber(8);
                 },
               ),
               NumberButton(
                 number: '9',
                 onPressed: () {
-                  notifier.addNumber(9);
+                  cubit.addNumber(9);
                 },
               ),
               Expanded(
                 child: ElevatedButton(
-                  style: AppStyles.buttonStyle,
+                  style: CalculatorStyle.buttonStyle,
                   onPressed: () {
-                    notifier.multiple();
+                    cubit.multiple();
                   },
                   child: const Icon(
-                    size: AppStyles.numberSize + 20,
+                    size: CalculatorStyle.numberSize + 20,
                     Icons.clear,
-                    color: AppStyles.actionColor,
+                    color: CalculatorStyle.actionColor,
                   ),
                 ),
               ),
@@ -154,31 +150,31 @@ class CalculatorPage extends StatelessWidget {
               NumberButton(
                 number: '4',
                 onPressed: () {
-                  notifier.addNumber(4);
+                  cubit.addNumber(4);
                 },
               ),
               NumberButton(
                 number: '5',
                 onPressed: () {
-                  notifier.addNumber(5);
+                  cubit.addNumber(5);
                 },
               ),
               NumberButton(
                 number: '6',
                 onPressed: () {
-                  notifier.addNumber(6);
+                  cubit.addNumber(6);
                 },
               ),
               Expanded(
                 child: ElevatedButton(
-                  style: AppStyles.buttonStyle,
+                  style: CalculatorStyle.buttonStyle,
                   onPressed: () {
-                    notifier.reduce();
+                    cubit.reduce();
                   },
                   child: const Icon(
-                    size: AppStyles.numberSize + 20,
+                    size: CalculatorStyle.numberSize + 20,
                     Icons.remove,
-                    color: AppStyles.actionColor,
+                    color: CalculatorStyle.actionColor,
                   ),
                 ),
               ),
@@ -189,31 +185,31 @@ class CalculatorPage extends StatelessWidget {
               NumberButton(
                 number: '1',
                 onPressed: () {
-                  notifier.addNumber(1);
+                  cubit.addNumber(1);
                 },
               ),
               NumberButton(
                 number: '2',
                 onPressed: () {
-                  notifier.addNumber(2);
+                  cubit.addNumber(2);
                 },
               ),
               NumberButton(
                 number: '3',
                 onPressed: () {
-                  notifier.addNumber(3);
+                  cubit.addNumber(3);
                 },
               ),
               Expanded(
                 child: ElevatedButton(
-                  style: AppStyles.buttonStyle,
+                  style: CalculatorStyle.buttonStyle,
                   onPressed: () {
-                    notifier.increment();
+                    cubit.increment();
                   },
                   child: const Icon(
-                    size: AppStyles.numberSize + 20,
+                    size: CalculatorStyle.numberSize + 20,
                     Icons.add_outlined,
-                    color: AppStyles.actionColor,
+                    color: CalculatorStyle.actionColor,
                   ),
                 ),
               ),
@@ -225,14 +221,14 @@ class CalculatorPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
-                        WidgetStatePropertyAll(AppStyles.iconColor),
+                        WidgetStatePropertyAll(CalculatorStyle.iconColor),
                   ),
                   onPressed: () {},
                   child: const Text(
                     '',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: AppStyles.numberSize,
+                      fontSize: CalculatorStyle.numberSize,
                     ),
                   ),
                 ),
@@ -240,23 +236,23 @@ class CalculatorPage extends StatelessWidget {
               NumberButton(
                 number: '0',
                 onPressed: () {
-                  notifier.addNumber(0);
+                  cubit.addNumber(0);
                 },
               ),
               Expanded(
                 child: ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
-                        WidgetStatePropertyAll(AppStyles.iconColor),
+                        WidgetStatePropertyAll(CalculatorStyle.iconColor),
                   ),
                   onPressed: () {
-                    notifier.getFractionalNumber();
+                    cubit.getFractionalNumber();
                   },
                   child: const Text(
                     ',',
                     style: TextStyle(
-                      color: AppStyles.numberColor,
-                      fontSize: AppStyles.numberSize,
+                      color: CalculatorStyle.numberColor,
+                      fontSize: CalculatorStyle.numberSize,
                     ),
                   ),
                 ),
@@ -265,16 +261,16 @@ class CalculatorPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
-                        WidgetStatePropertyAll(AppStyles.actionColor),
+                        WidgetStatePropertyAll(CalculatorStyle.actionColor),
                   ),
                   onPressed: () {
-                    notifier.equal();
+                    cubit.equal();
                   },
                   child: const Text(
                     '=',
                     style: TextStyle(
-                      color: AppStyles.numberColor,
-                      fontSize: AppStyles.numberSize,
+                      color: CalculatorStyle.numberColor,
+                      fontSize: CalculatorStyle.numberSize,
                     ),
                   ),
                 ),
@@ -352,47 +348,56 @@ class CalculatorConsumerText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CalculatorNotifier>(
-      builder: (BuildContext context, value, Widget? child) {
-        return Text(
-          value.firstNumber + value.action + value.secondNumber,
-          style: const TextStyle(fontSize: 60, color: Colors.white),
-        );
-      },
+    final cubit = context.watch<CalculatorCubit>().state;
+    return Text(
+      cubit.firstNumber + cubit.action + cubit.secondNumber,
+      style: const TextStyle(fontSize: 60, color: Colors.white),
     );
   }
 }
 
-class CalculatorConsumerHistory extends StatelessWidget {
-  const CalculatorConsumerHistory({super.key});
+// class CounterText extends StatelessWidget {
+//   const CounterText({
+//     super.key,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final counter = context.watch<CounterNotifier>().counter;
+//     return Text(
+//       '$counter',
+//       style: const TextStyle(fontSize: 50),
+//     );
+//   }
+// }
+
+class CalculatorHistory extends StatelessWidget {
+  const CalculatorHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CalculatorNotifier>(
-      builder: (BuildContext context, value, Widget? child) {
-        return SizedBox(
-          height: 200,
-          child: ListView.builder(
-            itemCount: value.historyList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      value.historyList[index],
-                      style: const TextStyle(
-                        color: AppStyles.iconColor,
-                        fontSize: AppStyles.numberSize,
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
+    final cubit = context.watch<CalculatorState>().historyList;
+    return SizedBox(
+      height: 200,
+      child: ListView.builder(
+        itemCount: cubit.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Row(
+            children: [
+              Expanded(
+                child: Text(
+                  cubit[index],
+                  style: const TextStyle(
+                    color: CalculatorStyle.iconColor,
+                    fontSize: CalculatorStyle.numberSize,
                   ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+                  textAlign: TextAlign.end,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

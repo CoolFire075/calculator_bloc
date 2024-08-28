@@ -23,7 +23,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(
       state.copyWith(
         calculatorAction: CalculatorAction.increment,
-        action: '-',
+        action: '+',
         hasAction: true,
       ),
     );
